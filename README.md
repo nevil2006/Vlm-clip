@@ -1,156 +1,175 @@
 # Vlm-clip   RN50
-PathoVision: AI-Driven Breast Lesion Classification using CLIP
-Classifying benign and malignant breast lesions using Vision-Language Models.
 
-Abstract
-PathoVision is an AI-powered framework that leverages the power of CLIP (Contrastive Language–Image Pre-Training) to classify breast lesions (from histopathology images) into benign or malignant, including 8 subtypes. Unlike traditional models, CLIP interprets visual inputs using natural language prompts, enabling zero-shot inference, high adaptability, and explainability in medical imaging.
+#  PathoVision: AI-Driven Breast Lesion Classification using CLIP
 
-Motivation
-Breast cancer is a leading cause of death in women globally. Early detection through histopathological analysis is crucial, yet expert diagnosis is:
+> Classifying benign and malignant breast lesions using Vision–Language Models.
 
-Time-consuming
+---
 
-Prone to human error
+##  Abstract
 
-Limited by the availability of labeled data
+**PathoVision** is an AI-powered framework leveraging **CLIP (Contrastive Language–Image Pre-Training)** to classify breast lesions as **benign** or **malignant**, including **8 subtypes**. Unlike traditional models, CLIP uses natural language prompts to interpret visual data, enabling:
 
-PathoVision aims to assist pathologists by providing an interpretable, fast, and robust classification tool.
+- Zero-shot inference  
+- High adaptability  
+- Explainability in medical imaging  
 
-Dataset
-Used datasets include:
+---
 
-BreakHis
+##  Motivation
 
-PCam
+Breast cancer is a leading cause of death in women worldwide. Histopathological diagnosis is:
+-  Time-consuming  
+-  Prone to human error  
+-  Dependent on labeled datasets  
 
-CBIS-DDSM
+**PathoVision** aims to assist pathologists with a robust, explainable, and efficient classification tool.
 
-Classes:
-Benign:
+---
 
-Adenosis
+##  Dataset
 
-Fibroadenoma
+**Datasets Used:**
+- BreakHis  
+- PCam  
+- CBIS-DDSM  
 
-Tubular Adenoma
+**Classes:**
 
-Phyllodes Tumor
+>  **Benign**
+- Adenosis  
+- Fibroadenoma  
+- Tubular Adenoma  
+- Phyllodes Tumor  
 
-Malignant:
+>  **Malignant**
+- Ductal Carcinoma  
+- Lobular Carcinoma  
+- Mucinous Carcinoma  
+- Papillary Carcinoma  
 
-Ductal Carcinoma
+**Preprocessing:**
+- Converted to RGB  
+- Resized to `224×224`  
+- Organized into `train`, `val`, and `test` folders  
 
-Lobular Carcinoma
+---
 
-Mucinous Carcinoma
+##  Methodology
 
-Papillary Carcinoma
+###  Model Architectures
 
- Preprocessing:
-Converted to RGB
+- `Zero-Shot CLIP (ViT-L/14 & RN50)`  
+  → Cosine similarity with text prompts  
+- `CLIP + Logistic Regression`  
+  → Visual embeddings + Scikit-learn classifier  
+- `CLIP + Custom Classifier`  
+  → CLIP encoder + FC + Dropout + ReLU  
+- `ResNet50 (Fine-tuned)`  
+  → End-to-end classification head  
 
-Resized to 224×224
+###  Training Setup
 
-Organized into train, val, and test folders
+- **Loss:** CrossEntropy + Label Smoothing  
+- **Optimizer:** Adam (weight decay: `1e-5`)  
+- **Scheduler:** StepLR  
+- **Epochs:** 35  
+- **Hardware:** NVIDIA GPU recommended  
 
- Methodology
- Model Architectures:
-Zero-Shot CLIP (ViT-L/14 & RN50)
-→ Classifies using cosine similarity with text prompts
+---
 
-CLIP + Logistic Regression
-→ CLIP visual embeddings + Scikit-learn classifier
+##  Results
 
-CLIP + Custom Classifier (Fine-tuned)
-→ CLIP encoder + dense head (FC + Dropout + ReLU)
+| Class              | Precision | Recall | F1-Score |
+|-------------------|-----------|--------|----------|
+| Ductal Carcinoma   | 0.91      | 0.89   | 0.90     |
+| Papillary Carcinoma| 0.87      | 0.88   | 0.87     |
+| Lobular Carcinoma  | 0.88      | 0.86   | 0.87     |
+| Mucinous Carcinoma | 0.89      | 0.90   | 0.89     |
+| Adenosis           | 0.93      | 0.92   | 0.92     |
+| Fibroadenoma       | 0.86      | 0.85   | 0.85     |
+| Phyllodes Tumor    | 0.84      | 0.85   | 0.84     |
+| Tubular Adenoma    | 0.87      | 0.89   | 0.88     |
 
-ResNet50 (Fine-tuned)
-→ Custom head trained end-to-end
+>  **Average F1-Score:** `0.88`  
+>  **CLIP Zero-Shot Accuracy:** `85%+`  
+>  **Fine-Tuned Accuracy:** `Up to 92%`  
 
- Training Setup:
-Loss: CrossEntropy + Label Smoothing
+ Predictions saved to `clip_predictions.csv`
 
-Optimizer: Adam, Weight Decay = 1e-5
+---
 
-Scheduler: StepLR, Epochs = 35
+##  Evaluation Metrics
 
-Hardware: NVIDIA GPU (recommended)
+-  Accuracy  
+-  Precision  
+-  Recall  
+-  F1 Score  
+-  Confusion Matrix  
+-  Train/Validation Curves  
 
- Results
-Class	Precision	Recall	F1-Score
-Ductal Carcinoma	0.91	0.89	0.90
-Papillary Carcinoma	0.87	0.88	0.87
-Lobular Carcinoma	0.88	0.86	0.87
-Mucinous Carcinoma	0.89	0.90	0.89
-Adenosis	0.93	0.92	0.92
-Fibroadenoma	0.86	0.85	0.85
-Phyllodes Tumor	0.84	0.85	0.84
-Tubular Adenoma	0.87	0.89	0.88
+---
 
- Average F1-Score: 0.88
+##  System Requirements
 
-CLIP Zero-Shot Accuracy: 85%+
+###  Hardware
+- CPU: Intel i5/i7 or equivalent  
+- RAM: 8GB+  
+- GPU (recommended): NVIDIA  
 
-Fine-tuned Accuracy: Up to 92%
+###  Software
+- Python 3.10+  
+- PyTorch  
+- OpenAI CLIP  
+- Scikit-learn, NumPy, Matplotlib  
+- Google Colab / Jupyter Notebook  
 
-Evaluation stored in clip_predictions.csv
+---
 
- Evaluation Metrics
-Accuracy
+##  Research Inspiration
 
-Precision
+- [CLIP by OpenAI](https://openai.com/blog/clip)  
+- Pathology-specific VLMs (e.g., PathologyVLM, SupCon-ViT)  
+- BreakHis dataset benchmarks  
 
-Recall
+ For 25+ reviewed research papers, see `research_analysis.md`
 
-F1 Score
+---
 
-Confusion Matrix
+##  Conclusion
 
-Train/Val Curves
+**PathoVision** showcases the capability of Vision–Language Models in histopathology:
 
- System Requirements
- Hardware:
-CPU: Intel i5/i7 or equivalent
+-  Zero-shot clinical prompt-based classification  
+-  Reliable across 8 detailed lesion subtypes  
+-  Strong performance even with limited labeled data  
+-  Opens doors to privacy-aware, explainable AI in healthcare  
 
-RAM: 8GB+
+---
 
-GPU (recommended): NVIDIA (for fine-tuning)
+##  Future Work
 
- Software:
-Python 3.10+
+-  Incorporate multimodal data (e.g., patient reports + images)  
+-  Add explainability tools (e.g., Grad-CAM for CLIP)  
+-  Explore federated learning across hospitals  
 
-PyTorch
+---
 
-CLIP by OpenAI
+##  Contributing
 
-Scikit-learn, NumPy, Matplotlib
+Coming soon...  
+Feel free to open issues or fork the repo to contribute!
 
-Google Colab or Jupyter Notebook
+---
 
- Research Inspiration
-CLIP (OpenAI)
+##  Disclaimer
 
-Pathology-specific VLMs (e.g., PathologyVLM, SupCon-ViT)
+This project is **not** a medical device and is intended **for research purposes only**. It should not be used for clinical decision-making without expert review.
 
-BreakHis dataset studies
+---
 
-See the research_analysis.md (if you add it) for a detailed summary of 25+ related papers.
+##  Contact
 
- Conclusion
-PathoVision proves that Vision–Language Models can revolutionize medical diagnostics:
+For collaborations or queries, reach out via GitHub or email.
 
-Zero-shot capability with clinical text prompts
-
-Reliable classification across 8 breast lesion types
-
-Strong performance in low-data scenarios
-
-Opens doors for scalable, privacy-preserving, explainable AI in healthcare
-
- Future Work
-Expand to multi-modal data (e.g., reports + images)
-
-Add explainability tools (e.g., Grad-CAM for CLIP)
-
-Explore federated learning for privacy
 
